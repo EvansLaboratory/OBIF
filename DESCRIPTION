@@ -1,11 +1,16 @@
 Package: OBIF
-Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Title: What the Package Does (One Line, Title Case)
+Version: 1.0
+Authors@R: 
+  person(given = "Jezreel",
+         family = "Pantaleón García",
+         role = c("aut", "cre", "cph"),
+         email = "jpantaleon@mdanderson.org",
+         comment = c(ORCID = "0000-0002-9647-2584"))
+Description: OBIF Package in R includes the analytical components of the Omics-Based Interaction Framework. This framework and package are used to discover molecular drivers of non-additive phenotypes (synergistic or angatonistic responses) from single- or multi-Omics data. The package is primarily design to perform full factorial analysis of feature expression data from single vs. dual exposures to identify molecular clusters of features that reveal pathways, functions and regulators mediating synergistic or antagonistic phenotypes. Please cite OBIF from DOI: 10.1101/2020.04.16.041350v2 . 
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Imports: limma
