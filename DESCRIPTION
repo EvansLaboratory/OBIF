@@ -13,4 +13,4 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
-Imports: limma
+Imports: Biobase, ClassDiscovery, circlize, cowplot, eulerr, ggbiplot, ggplot2, graphics, gtools, limma, lumi, methods, plyr, preprocessCore, rafalib, reshape2, stats

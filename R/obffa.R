@@ -11,7 +11,7 @@
 #' @return A data frame with the individual p-values per feature for main effects, simple main effects and interaction effects.
 #' @export
 #'
-#' @examples
+#'
 obffa <- function(dataAR, design, contrast) {
   fit <- limma::lmFit(dataAR, design)
   fit.ebayes <- limma::eBayes(fit)

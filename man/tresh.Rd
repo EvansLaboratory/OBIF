@@ -4,10 +4,10 @@
 \alias{tresh}
 \title{RPKM/FPKM/TPM Tresholding}
 \usage{
-tresh(dataAR, treshold)
+tresh(expr.val, treshold)
 }
 \arguments{
-\item{dataAR}{A numeric data matrix with the analyis-ready feature expression values where row are features and columns are samples.}
+\item{expr.val}{Text}
 
 \item{treshold}{A numeric value with the desired treshold to apply to the dataset.}
 }
