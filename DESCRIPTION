@@ -1,5 +1,5 @@
 Package: OBIF
-Title: What the Package Does (One Line, Title Case)
+Title: Omics-Based Interaction Framework
 Version: 1.0
 Authors@R: 
   person(given = "Jezreel",
