@@ -20,14 +20,15 @@ OBIFi <- function(final.labels) {
 
   # Make IS plot
   cond_col_isplot = function (value) {ifelse (value == "iDEM.Antagonistic", "orange",
-                                          ifelse (value == "iDEM.Synergistic", "purple", "lightgrey"))}
+                                              ifelse (value == "iDEM.Synergistic", "purple", "lightgrey"))}
 
-  ISplot <- c.AB.iDEMs[order(c.AB.iDEMs$AbsIScore),]
+  ISplot <- c.AB.DEMS[order(c.AB.DEMS$AbsIScore),]
 
   true.plot <- barplot(ISplot$AbsIScore,
-          horiz = TRUE,
-          col = cond_col_isplot(ISplot$f.IS.iDEMs),
-          border = NA)
-
+                       horiz = TRUE,
+                       col = cond_col_isplot(ISplot$iDEMs),
+                       border = NA,
+                       main = "Interaction Score Plot")
+  true.plot
   return(true.plot)
 }

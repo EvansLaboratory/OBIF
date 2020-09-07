@@ -35,8 +35,11 @@ FtDbh <- function(final.results, l2fc.co, pval.co) {
                                                                                       "Error.No.EP"))))))))
 
   # Label your AB.DEM by iDEMs
-  final.labels$f.IS.iDEMs <- ifelse (final.labels$AB.iDEM == "Yes",
-                                     paste("iDEM.", final.labels$DoubleIS, sep = ""), "non-iDEM")
+  final.labels$f.IS <- final.labels$AbsIScore
+  final.labels$f.IS.iDEMs <- ifelse (final.labels$AB.iDEM == "Yes", final.labels$f.IS, log2(1))
+
+  final.labels$iDEMs <- ifelse (final.labels$AB.iDEM == "Yes",
+                                paste("iDEM.", final.labels$DoubleIS, sep = ""), "non-iDEM")
 
   return(final.labels)
 }
