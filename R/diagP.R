@@ -5,7 +5,7 @@
 #' @return Text
 #' @export
 #'
-#'
+#' @import ggbiplot ggplot2
 diagP <- function(model){
   p1<-ggplot(model, aes(.fitted, .resid))+geom_point()
   p1<-p1+stat_smooth(method="lm")+geom_hline(yintercept=0, col="red", linetype="dashed")
