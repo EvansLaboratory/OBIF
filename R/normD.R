@@ -111,32 +111,8 @@ normD <- function(expr.val, QCplot, col.samples) {
             qc.bp.data.6,
             qc.bp.data.7)
 
-  ## 1.D Using hierarchical clutersing
-  hcl.data.0 <- stats::hclust(ClassDiscovery::distanceMatrix(dataset =  data.0, metric =  "pearson"), method = "ward.D2")
-  hcl.data.1 <- stats::hclust(ClassDiscovery::distanceMatrix(dataset =  data.1, metric =  "pearson"), method = "ward.D2")
-  hcl.data.2 <- stats::hclust(ClassDiscovery::distanceMatrix(dataset =  data.2, metric =  "pearson"), method = "ward.D2")
-  hcl.data.3 <- stats::hclust(ClassDiscovery::distanceMatrix(dataset =  data.3, metric =  "pearson"), method = "ward.D2")
-  hcl.data.4 <- stats::hclust(ClassDiscovery::distanceMatrix(dataset =  data.4, metric =  "pearson"), method = "ward.D2")
-  hcl.data.5 <- stats::hclust(ClassDiscovery::distanceMatrix(dataset =  data.5, metric =  "pearson"), method = "ward.D2")
-  hcl.data.6 <- stats::hclust(ClassDiscovery::distanceMatrix(dataset =  data.6, metric =  "pearson"), method = "ward.D2")
-  hcl.data.7 <- stats::hclust(ClassDiscovery::distanceMatrix(dataset =  data.7, metric =  "pearson"), method = "ward.D2")
-
-  QCnorm.HC <- function(){
-    graphics::par(mfrow = c(3,3))
-    qc.hcl.data.0 <- rafalib::myplclust(hcl.data.0, labels = hcl.data.0$labels, lab.col = col.samples, main = "Data.0", sub = "Original")
-    qc.hcl.data.1 <- rafalib::myplclust(hcl.data.1, labels = hcl.data.1$labels, lab.col = col.samples, main = "Data.1", sub = "BgC")
-    qc.hcl.data.3 <- rafalib::myplclust(hcl.data.3, labels = hcl.data.3$labels, lab.col = col.samples, main = "Data.3", sub = "QNm")
-    qc.hcl.data.4 <- rafalib::myplclust(hcl.data.4, labels = hcl.data.4$labels, lab.col = col.samples, main = "Data.4", sub = "BgC + L2T")
-    qc.hcl.data.5 <- rafalib::myplclust(hcl.data.5, labels = hcl.data.5$labels, lab.col = col.samples, main = "Data.5", sub = "BgC + QNm")
-    qc.hcl.data.7 <- rafalib::myplclust(hcl.data.7, labels = hcl.data.7$labels, lab.col = col.samples, main = "Data.7", sub = "BgC + L2T + QNm")
-    graphics::par(mfrow = c(1,1))
-    true.HC <- grDevices::recordPlot()
-    return(true.HC)
-  }
-
   normD.QC <- ifelse(QCplot == "VP", return(QCnorm.VP),
                     ifelse(QCplot == "DP", return(QCnorm.DP),
-                           ifelse(QCplot == "BP", return(QCnorm.BP),
-                                  ifelse(QCplot == "HC", return(QCnorm.HC), "Method not valid"))))
+                           ifelse(QCplot == "BP", return(QCnorm.BP), "Method not valid")))
   return(normD.QC)
 }
