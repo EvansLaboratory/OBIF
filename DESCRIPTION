@@ -14,3 +14,4 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports: Biobase, ClassDiscovery, circlize, cowplot, eulerr, ggbiplot, ggplot2, graphics, gtools, limma, lumi, methods, plyr, preprocessCore, rafalib, reshape2, stats
+biocViews: Software, ExperimentData
