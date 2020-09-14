@@ -1,4 +1,4 @@
-#' Title
+#' OBIF PCA Plot for EPs
 #'
 #' @param final.labels Text
 #'

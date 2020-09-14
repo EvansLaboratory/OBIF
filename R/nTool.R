@@ -1,4 +1,4 @@
-#' Title
+#' Sample number-based parameter making function for OBIF
 #'
 #' Text
 #'

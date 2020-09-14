@@ -2,7 +2,7 @@
 % Please edit documentation in R/FtDbf.R
 \name{FtDbf}
 \alias{FtDbf}
-\title{Title}
+\title{Feature Discovery with Bonferroni by OBIF}
 \usage{
 FtDbf(final.results, l2fc.co, pval.co)
 }
@@ -17,5 +17,5 @@ FtDbf(final.results, l2fc.co, pval.co)
 Text
 }
 \description{
-Title
+Feature Discovery with Bonferroni by OBIF
 }

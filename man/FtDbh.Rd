@@ -2,7 +2,7 @@
 % Please edit documentation in R/FtDbh.R
 \name{FtDbh}
 \alias{FtDbh}
-\title{Title}
+\title{Feature Discovery with BH-method by OBIF}
 \usage{
 FtDbh(final.results, l2fc.co, pval.co)
 }
@@ -17,5 +17,5 @@ FtDbh(final.results, l2fc.co, pval.co)
 Text
 }
 \description{
-Title
+Feature Discovery with BH-method by OBIF
 }

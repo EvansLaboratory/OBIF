@@ -2,7 +2,7 @@
 % Please edit documentation in R/OBIFi.R
 \name{OBIFi}
 \alias{OBIFi}
-\title{Title}
+\title{OBIF IS plot for iDEMS}
 \usage{
 OBIFi(final.labels)
 }
@@ -13,5 +13,5 @@ OBIFi(final.labels)
 Text
 }
 \description{
-Title
+OBIF IS plot for iDEMS
 }

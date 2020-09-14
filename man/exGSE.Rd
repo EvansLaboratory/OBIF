@@ -2,7 +2,7 @@
 % Please edit documentation in R/exGSE.R
 \name{exGSE}
 \alias{exGSE}
-\title{Title}
+\title{Export to GSEA}
 \usage{
 exGSE(final.labels, col.ft.name, dataAR)
 }
@@ -17,5 +17,5 @@ exGSE(final.labels, col.ft.name, dataAR)
 Text
 }
 \description{
-Title
+Export to GSEA
 }

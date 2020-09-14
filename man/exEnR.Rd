@@ -2,7 +2,7 @@
 % Please edit documentation in R/exEnR.R
 \name{exEnR}
 \alias{exEnR}
-\title{Title}
+\title{Export to EnrichR}
 \usage{
 exEnR(final.labels, col.ft.name)
 }
@@ -15,5 +15,5 @@ exEnR(final.labels, col.ft.name)
 Text
 }
 \description{
-Title
+Export to EnrichR
 }

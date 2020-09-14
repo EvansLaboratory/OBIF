@@ -2,7 +2,7 @@
 % Please edit documentation in R/normD.R
 \name{normD}
 \alias{normD}
-\title{Title}
+\title{Normalization for Data matrix m}
 \usage{
 normD(expr.val, QCplot, col.samples)
 }
@@ -17,5 +17,5 @@ normD(expr.val, QCplot, col.samples)
 Text
 }
 \description{
-Title
+Normalization for Data matrix m
 }

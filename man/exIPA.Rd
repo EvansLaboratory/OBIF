@@ -2,7 +2,7 @@
 % Please edit documentation in R/exIPA.R
 \name{exIPA}
 \alias{exIPA}
-\title{Title}
+\title{Export to IPA}
 \usage{
 exIPA(final.labels, col.ft.name, obffa.res, FtD.method)
 }
@@ -19,5 +19,5 @@ exIPA(final.labels, col.ft.name, obffa.res, FtD.method)
 Text
 }
 \description{
-Title
+Export to IPA
 }

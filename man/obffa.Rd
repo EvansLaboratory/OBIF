@@ -2,7 +2,7 @@
 % Please edit documentation in R/obffa.R
 \name{obffa}
 \alias{obffa}
-\title{Full factorial analysis}
+\title{Full Factorial Analysis}
 \usage{
 obffa(dataAR, design, contrast)
 }

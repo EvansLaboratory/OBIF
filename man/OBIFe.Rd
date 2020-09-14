@@ -2,7 +2,7 @@
 % Please edit documentation in R/OBIFe.R
 \name{OBIFe}
 \alias{OBIFe}
-\title{Title}
+\title{OBIF Euler Diagram for DEMs}
 \usage{
 OBIFe(final.labels)
 }
@@ -13,5 +13,5 @@ OBIFe(final.labels)
 Text
 }
 \description{
-Title
+OBIF Euler Diagram for DEMs
 }

@@ -1,4 +1,4 @@
-#' Title
+#' OBIF Euler Diagram for DEMs
 #'
 #' @param final.labels Text
 #'

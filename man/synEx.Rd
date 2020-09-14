@@ -2,7 +2,7 @@
 % Please edit documentation in R/synEx.R
 \name{synEx}
 \alias{synEx}
-\title{Title}
+\title{Synergy-labeled Expression value calculations}
 \usage{
 synEx(dataAR, si)
 }

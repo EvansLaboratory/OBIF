@@ -2,7 +2,7 @@
 % Please edit documentation in R/nTool.R
 \name{nTool}
 \alias{nTool}
-\title{Title}
+\title{Sample number-based parameter making function for OBIF}
 \usage{
 nTool(param, n.ctrl, n.facA, n.facB, n.facAB)
 }

@@ -1,4 +1,4 @@
-#' Title
+#' Feature Discovery by OBIF
 #'
 #' @param final.results Text
 #' @param pval.co Text

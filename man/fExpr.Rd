@@ -2,7 +2,7 @@
 % Please edit documentation in R/fExpr.R
 \name{fExpr}
 \alias{fExpr}
-\title{Title}
+\title{Feature Expression extraction}
 \usage{
 fExpr(Data, colnum1, colnum2, n.ctrl, n.facA, n.facB, n.facAB)
 }

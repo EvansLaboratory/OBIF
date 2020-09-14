@@ -1,4 +1,4 @@
-#' Title
+#' Export to GSEA
 #'
 #' @param final.labels Text
 #' @param col.ft.name Text

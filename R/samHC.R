@@ -1,4 +1,4 @@
-#' Title
+#' Sample Hierarchical Clustering
 #'
 #' @param dataset Text
 #' @param col.samples Text

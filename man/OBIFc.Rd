@@ -2,7 +2,7 @@
 % Please edit documentation in R/OBIFc.R
 \name{OBIFc}
 \alias{OBIFc}
-\title{Title}
+\title{OBIF Circos Plot for features summary}
 \usage{
 OBIFc(final.labels)
 }
@@ -13,5 +13,5 @@ OBIFc(final.labels)
 Text
 }
 \description{
-Title
+OBIF Circos Plot for features summary
 }

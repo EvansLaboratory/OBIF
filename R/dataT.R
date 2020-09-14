@@ -1,11 +1,13 @@
-#' Title
+#' DataT function
 #'
-#' Text
+#' This function transforms the un-scaled original expression values from the data matrix m into the chosen OBIF-scaled expression values that will be used for Full Factorial Analysis. The data matrix m must have already been extracted from the original Omics data using either the DatAR or fExpr functions.
+#' The scaling method should've already been chosen from the results of the analys of the function normD. The data matrix m should not have any outliers identified by HCsam, and if so, reanalysis with norm D is required to choose the best data scaling.
+#' The scaling methods include: 0, original; 1, background correction only; 2, log2 transformation only; 3, quantile normalization only; 4, background correction + log2 transformation; 5, background correction + quantile normalization; 6, log2 transformation + quantile normalization; 7, background correction + log2 transformation + quantile normalization.
 #'
-#' @param expr.val Text
-#' @param method Text
+#' @param expr.val A data frame containing the unscaled original values of the data matrix m that will be used for analysis.
+#' @param method A numeric value indicating the scaling strategy of the data matrix m as indicated above.
 #'
-#' @return Text
+#' @return A data frame containing the OBIF-scaled values of the data matrix m that will be used for Full Factorial Analysis.
 #' @export
 #'
 #'

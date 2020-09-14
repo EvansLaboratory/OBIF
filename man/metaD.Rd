@@ -2,7 +2,7 @@
 % Please edit documentation in R/metaD.R
 \name{metaD}
 \alias{metaD}
-\title{Title}
+\title{Meta data extraction function}
 \usage{
 metaD(Data, colnum1, colnum2)
 }
@@ -17,5 +17,5 @@ metaD(Data, colnum1, colnum2)
 Text
 }
 \description{
-Title
+Meta data extraction function
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/fDisc.R
 \name{fDisc}
 \alias{fDisc}
-\title{Title}
+\title{Feature Discovery by OBIF}
 \usage{
 fDisc(final.results, l2fc.co, pval.co, pval.sel)
 }
@@ -19,5 +19,5 @@ fDisc(final.results, l2fc.co, pval.co, pval.sel)
 Text
 }
 \description{
-Title
+Feature Discovery by OBIF
 }

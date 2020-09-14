@@ -1,4 +1,4 @@
-#' Full factorial analysis
+#' Full Factorial Analysis
 #'
 #' The obffa function is the primary function of OBIF and is used to perform full factorial analysis in an Ananlysis-Ready dataset.
 #'

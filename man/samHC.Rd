@@ -2,7 +2,7 @@
 % Please edit documentation in R/samHC.R
 \name{samHC}
 \alias{samHC}
-\title{Title}
+\title{Sample Hierarchical Clustering}
 \usage{
 samHC(dataset, col.samples)
 }
@@ -15,5 +15,5 @@ samHC(dataset, col.samples)
 Text
 }
 \description{
-Title
+Sample Hierarchical Clustering
 }

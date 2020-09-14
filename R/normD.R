@@ -1,4 +1,4 @@
-#' Title
+#' Normalization for Data matrix m
 #'
 #' @param expr.val Text
 #' @param QCplot Text

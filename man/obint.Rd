@@ -2,7 +2,7 @@
 % Please edit documentation in R/obint.R
 \name{obint}
 \alias{obint}
-\title{Title}
+\title{Omics-based interaction analysis by OBIF}
 \usage{
 obint(dataAR, design2x2, result)
 }
@@ -17,5 +17,5 @@ obint(dataAR, design2x2, result)
 Text
 }
 \description{
-Title
+Omics-based interaction analysis by OBIF
 }

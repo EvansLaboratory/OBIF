@@ -1,4 +1,4 @@
-#' Title
+#' Feature Discovery with Bonferroni by OBIF
 #'
 #' @param final.results Text
 #' @param l2fc.co Text

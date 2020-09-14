@@ -2,7 +2,7 @@
 % Please edit documentation in R/FtDpv.R
 \name{FtDpv}
 \alias{FtDpv}
-\title{Title}
+\title{Feature Discovery with p-value by OBIF}
 \usage{
 FtDpv(final.results, l2fc.co, pval.co)
 }
@@ -17,5 +17,5 @@ FtDpv(final.results, l2fc.co, pval.co)
 Text
 }
 \description{
-Title
+Feature Discovery with p-value by OBIF
 }

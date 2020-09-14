@@ -1,4 +1,4 @@
-#' Title
+#' Omics-based interaction analysis by OBIF
 #'
 #' @param dataAR Text
 #' @param design2x2 Text

@@ -1,4 +1,4 @@
-#' Title
+#' OBIF Circos Plot for features summary
 #'
 #' @param final.labels Text
 #'

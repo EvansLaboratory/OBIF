@@ -1,4 +1,4 @@
-#' Title
+#' Synergy-labeled Expression value calculations
 #'
 #' Text
 #'

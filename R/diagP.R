@@ -1,8 +1,11 @@
-#' Title
+#' OBIF Diagnostic Plots
 #'
-#' @param model Text
+#' This functions derives the regression diagnostic plots of any of the models fitted by OBIF to be used as Quality Control and Quality Assessment steps. To the apply this functions, the fitted model objects must be already fortified.
+#' The diagnostic plots include: 1, Residual vs Fitted plot; 2, Normal Q-Q plot; 3, Scale-Location plot; 4, Cook's distance plot; 5, Residuals vs Leverage plot; 6, Cook's dist vs Leverage hii/1-hii plot.
 #'
-#' @return Text
+#' @param model A fitted model object of the Omics-based interaction analysis or the Full Factorial Analysis performed by OBIF.
+#'
+#' @return A list of plots containing 6 diagnostics plots of the regression model.
 #' @export
 #'
 #' @import ggbiplot ggplot2

@@ -1,4 +1,4 @@
-#' Title
+#' Meta data extraction function
 #'
 #' @param Data Text
 #' @param colnum1 Text

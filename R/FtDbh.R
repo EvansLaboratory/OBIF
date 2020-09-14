@@ -1,4 +1,4 @@
-#' Title
+#' Feature Discovery with BH-method by OBIF
 #'
 #' @param final.results Text
 #' @param l2fc.co Text

@@ -2,7 +2,7 @@
 % Please edit documentation in R/OBIFp.R
 \name{OBIFp}
 \alias{OBIFp}
-\title{Title}
+\title{OBIF PCA Plot for EPs}
 \usage{
 OBIFp(final.labels)
 }
@@ -13,5 +13,5 @@ OBIFp(final.labels)
 Text
 }
 \description{
-Title
+OBIF PCA Plot for EPs
 }
