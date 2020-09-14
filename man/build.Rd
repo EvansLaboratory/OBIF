@@ -2,24 +2,24 @@
 % Please edit documentation in R/build.R
 \name{build}
 \alias{build}
-\title{Title}
+\title{Build function}
 \usage{
 build(featIDs, meta.data, dataAR, obffa.res, synex.res)
 }
 \arguments{
-\item{featIDs}{Text}
+\item{featIDs}{A vector object containing the unique IDs or names of the features of the Omics dataset}
 
-\item{meta.data}{Text}
+\item{meta.data}{A data frame containing the additional metadata to be associated with each feature}
 
-\item{dataAR}{Text}
+\item{dataAR}{A data frame containing the OBIF-scaled analysis ready expression values of all features per samples}
 
-\item{obffa.res}{Text}
+\item{obffa.res}{A data frame with all, or selected, results from the Full Factorial Analysis}
 
-\item{synex.res}{Text}
+\item{synex.res}{A data frame with all, or selected, results from the relative expression calculations and scorings}
 }
 \value{
-Text
+A data frame containing the merged columns of all the inputs. This dataset is to be used for Feature Discovery analysis.
 }
 \description{
-Title
+This function is used to finalize the Omics Screening component of OBIF, and prepares a complete dataset that will be used for the Feature Discovery component of OBIF.
 }

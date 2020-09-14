@@ -2,28 +2,29 @@
 % Please edit documentation in R/datAR.R
 \name{datAR}
 \alias{datAR}
-\title{Title}
+\title{DatAR function}
 \usage{
 datAR(Data, colnum1, colnum2, n.ctrl, n.facA, n.facB, n.facAB)
 }
 \arguments{
-\item{Data}{Text}
+\item{Data}{A data frame containing the original Omics data being studied by OBIF. As minimum components, it must include the data matrix m, and additional columns can include feature names or metadata as needed.}
 
-\item{colnum1}{Text}
+\item{colnum1}{A numeric value indicating the column number where the data matrix m starts. That is the column of the first unexposed sample.}
 
-\item{colnum2}{Text}
+\item{colnum2}{A numeric value indicating the column number where the data matrix m ends. That is the column of the last combined exposed sample.}
 
-\item{n.ctrl}{Text}
+\item{n.ctrl}{A numeric value indicating the number of columns from the unexposed, control, samples in the data matrix m.}
 
-\item{n.facA}{Text}
+\item{n.facA}{A numeric value indicating the number of columns from the single factor A exposed samples in the data matrix m.}
 
-\item{n.facB}{Text}
+\item{n.facB}{A numeric value indicating the number of columns from the single factor B exposed samples in the data matrix m.}
 
-\item{n.facAB}{Text}
+\item{n.facAB}{A numeric value indicating the number of columns from the combined factor A + B exposed samples in the data matrix m.}
 }
 \value{
-Text
+A data frame containing the unscaled original values of the data matrix m that will be used for analysis
 }
 \description{
-Title
+This function extracts the data matrix m from an original data object. The data matrix m contains the expression values of all the features, as rows, from all the samples, as columns, as ordered for OBIF's input.
+Hence, the data object "Data" must be specified including the first, "colnum1", and last, "colnum2, column number of the data matrix m within the original data.
 }
