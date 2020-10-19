@@ -7,6 +7,171 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+# Zero handling
+Multiple strategies such as feature removal or modification exist to handle zero values from Omics data, whether for count-based such as RNA-seq or zero values from mass spectrometry or array-based data. The following literature is recommended to familiarize with zero handling in the analysis of Omics experiments during data analysis: Tarazona. Nat Comm, 2020; Quinn. GigaScience, 2019; Silverman. eLife, 2017. As a reminder, zero handling should be individually considered by the end-users during the pre-processing steps of their respective Omics data collection before using OBIF. As a reminder, the initial input for OBIF an analysis-ready data matrix m without negative or zero values which allows.
+
+OBIF was deliberately developed using a threshold approach where feature removal was applied for zero handling of zero-containing features in a dataset, if needed. This thresholding allows uniform handling of all matrix-ready datasets once they are in the pipeline by the normD function, regardless of platform. Within the package, the normD and obint functions allow users to evaluate the impact of each transformation step on data distribution and interaction analysis when modeling their data with OBIF before committing to any zero handling strategy during preferred in their pre-processing steps, or during data scaling within OBIF. Additionally, to address any zero values that escape user detection in pre-processing, our package already includes a thresh function to remove features containing zero values across all samples for raw counts, RPKM, FPKM or TPM. (This function also allows end users to modify the threshold value.)
+
+To guide the user in the analysis of zero-containing datasets, we will demonstrate below the analytic comparison of a microbiome dataset containing zero counts using negative binominal strategies without zero handling using DESeq2 and the thresholded data scaling strategy using OBIF.
+
+1. Loading packages
+> library(DESeq2)
+> library(OBIF)
+> library(ClassComparisson)
+
+2. Create working datasets before and after zero-handling
+In this example, we imported Malik et al, 2020’s microbiome sequence data that contains zero counts.
+
+# Load full data matrix with zero counts and analyze with DESeq2 using negative binominal strategies
+> data.orig <- read_excel("~/Documents/R/MA GSE148618 Microbiome/MA GSE148618 Microbiome (Reduced x Shrub).xlsx")
+> data <- fExpr(Data = data.orig,
+              colnum1 = 5,
+              colnum2 = 20,
+              n.ctrl = 4,
+              n.facA = 4,
+              n.facB = 4,
+              n.facAB = 4)
+> meta.data <- metaD(Data = data.orig,
+                   colnum1 = 5,
+                   colnum2 = 20)
+> feat.IDs <- ftIDs(Data = data.orig,
+                  colnum = 4,
+                  method = 2)
+
+# Identify factor names
+> factor.A <- "Reduced"
+> factor.B <- "Shrub"
+> factor.AB <- "Reduced + Shrub"
+
+# Set row and column names
+> row.names(data) <- feat.IDs
+> colnames(data) <- coldata
+# Use of negative binominal strategies without zero handling using DESeq2
+## Create factor design for interaction statistics 
+## Dataframe and design
+> si.orig <- data.frame(Factors=sapply(colnames(data),function(x)substr(x,1,regexpr('\\.',x)[1]-1)))
+> si.orig$Factors <- factor(si.orig$Factors, levels=c('ctrl','facA','facB','facAB'))
+> si <- si.orig
+> design <- model.matrix(~1+si$Factors)
+> colnames(design) <- levels(si$Factors)
+
+## Create elements for DESeq2
+> samples.col <- data.frame( "samples" = coldata )
+> col.data <- cbind(samples.col,si2x2, si)
+> dds.AB <- DESeqDataSetFromMatrix(countData = data,
+                              colData = col.data,
+                              design= ~ 1 + Factors)
+> dds.AB <- DESeq(dds.AB)
+> resultsNames(dds.AB) 					# lists the coefficients
+> res.AB <- results(dds.AB)				
+> res.AB.true <- results(dds.AB, contrast = c("Factors", "ctrl", "facAB")) # results for DEMs for factor AB
+> res.AB.inter <- results(dds.AB, contrast = c(0,-1,-1,1))	# results for the interaction effect at feature level
+
+# Extract p-values for comparative performance analysis
+> pval.des2.AB <- res.AB.true@listData[["pvalue"]] 	# p-values of expression analysis for factor AB
+> bum.pval.des2.AB <- Bum(pval.des2.AB) 		# performance evaluation of expression
+> pval.des2.AB.inter <- res.AB.inter@listData[["pvalue"]] 	# p-values of contrast for interaction effect
+> bum.pval.des2.AB.inter <- Bum(pval.des2.AB.inter) 	# performance evaluation from contrast analysis
+
+
+# Create data matrix m after zero handling and analyze with OBIF using full factorial analysis
+> data.m <- tresh(data, 1)			# Thresholding: Feature removal of zero values
+# Assessment of data scaling 		
+> obif.VP <- normD(data.m, "VP", col.samples)
+> obif.DP <- normD(data.m, "DP", col.samples)
+> obif.BP <- normD(data.m, "BP", col.samples)
+   
+# Best Gaussian-like distribution with minimum number of outlier features is given by Data 2. We will compare them as well to Data 6 to further evaluate quantile normalization.
+> data.m.0 <- dataT(data.m, 0)
+> data.m.2 <- dataT(data.m, 2)
+> data.m.4 <- dataT(data.m, 4)
+> data.m.6 <- dataT(data.m, 6)
+> data.m.7 <- dataT(data.m, 7)
+# Evaluation of data scaling on interaction analysis using the obint function
+> obint(dataAR = data.m.0, 
+      design2x2 = design2x2,
+      result = "modelsum")
+> obint(dataAR = data.m.2, 
+      design2x2 = design2x2,
+      result = "modelsum")
+> obint(dataAR = data.m.6, 
+      design2x2 = design2x2,
+      result = "modelsum")
+   
+
+# Data scaling 2 is chosen as the best fit for full factorial analysis with OBIF.
+> design <- nTool(param = "design", n.ctrl = 4,
+                  n.facA = 4, n.facB = 4, n.facAB = 4)
+
+> contrast <- nTool(param = "contrast", 
+                    n.ctrl = 4,
+                    n.facA = 4, n.facB = 4, n.facAB = 4)
+
+> si <- nTool(param = "si", 
+                  n.ctrl = 4,
+                  n.facA = 4, n.facB = 4, n.facAB = 4)
+
+> obffa.res <- obffa(dataAR = data.m.2,
+                   design = design, 
+                   contrast = contrast)
+
+# Extract p-values for comparative performance analysis
+> pval.obif.AB.data <- obffa.res$pval.exp.facAB		# p-values of expression analysis for factor AB
+> bum.pval.obif.AB <- Bum(pval.obif.AB.data)		# performance evaluation of expression
+> pval.obif.AB.inter <- obffa.res$pval.exp.facAB		# p-values of contrast for interaction effect
+> bum.pval.obif.AB.interr <- Bum(pval.obif.AB.inter) 	# performance evaluation from contrast analysis
+
+3. Comparative performance between analytic pipelines before and after zero-handling
+Evaluation metrics were calculated as described in the Methods section of the Manuscript using the beta-uniform mixture model to a set of p-values for each BUM element created above.
+
+> f <- summary(bum.pval.obif.AB, tau = 0.05) 	# Substitute the “bum.pval.”- element accordingly 
+> f.e <- f@estimates
+> FDP.f.e <- f.e$FP/(f.e$TP+f.e$FP)
+> prec.f.e <- f.e$TP/(f.e$TP+f.e$FP)
+> rec.f.e <- f.e$TP/(f.e$TP+f.e$FN)
+
+# Evaluation of expression analysis for DEMs of combined factor A + B
+> image(bum.pval.des2.AB) 	# Negative binomial strategies with DESeq2 before zero handling
+ROC: 0.9225
+False discovery proportion: 0.1431699
+Precision: 0.8568301
+Recall: 0.6837901
+
+
+
+> image(bum.pval.obif.AB)	# Tresholded data scaling strategy with OBIF after zero handling
+ROC: 0.9256 (≈)
+False discovery proportion: 0.01589925 (↓↓)
+Precision: 0.9841008 (↑↑) 
+Recall: 0.6955667 (↑)
+
+
+
+
+# Evaluation of contrast analysis for interaction effects in DEMs (iDEMs selection)
+> image(bum.pval.des2.AB) 	# Negative binomial strategies with DESeq2 before zero handling
+ROC: 0.8902
+False discovery proportion: 0.5565683
+Precision: 0.4434317
+Recall: 0.5657556
+
+
+
+> image(bum.pval.obif.AB)	# Tresholded data scaling strategy with OBIF after zero handling
+ROC: 0.8457 (≈)
+False discovery proportion: 0.09386081 (↓↓)
+Precision: 0.9061392 (↑↑) 
+Recall: 0.4203641 (↓)
+
+
+
+
+# Evaluation of Omics-based interaction analysis
+Before zero handling (Original)		After zero handling (OBIF)
+   
+With OBIF, we detected improved detection of interaction effect (Pr|t| ↓), model fitness (Adj. R2 ↑↑) and F-statistic (p-value ↓↓). Reanalysis of other datasets from Malik’s datasets performed similar in all evaluations.
+
+
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,

@@ -6,6 +6,302 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+# Installing OBIF
+At the time of this writing, OBIF is only available via GitHub and can be installed these commands:
+> install_github(“evanslaboratory/OBIF”)
+> library(OBIF)
+
+# Preparing data
+As a reminder, OBIF’s input in R requires an analysis-ready (non-negative non-zero values) data matrix m with expression values and of dimensions f x n, where f is the number of features as rows and n is the number of samples S as columns. The appropriate sample order in dimensions n of m is:
+n = S(0,0)1 + … + S(0,0)i + S(1,0)1 + … + S(1,0)i  + S(0,1)1 + … + S(0,1)i  + S(1,1)1 + … + S(1,1)i
+The subscripts denote the condition of the samples: exposed to neither factor (0,0), exposed to factor A alone (1,0), exposed to factor B alone (0,1) or exposed to both factors A and B (1,1). The superscripts represent the sample replicates from 1 to i within each of the four conditions. 
+
+Note: This data matrix m can have additional columns that will be considered metadata for the purpose of full factorial analysis. These columns can include feature names or additional feature/sample information.
+
+# Loading data
+During analysis, OBIF will change the column names according to the sample group they belong, and we recommend saving your group definitions as values for future reference. For example:
+> control <- “PBS”
+> factor.A <- “Pam2”
+> factor.B <- “ODN”
+> factor.AB <- “Pam2+ODN”
+Once properly formatted, you can import your data from an Excel or .csv directly from your local directory using RStudio. We recommend saving your original data as “data”:
+> library(readxl)
+> data <- read_excel("~/OBIF/GSE28994.xlsx")
+> View(data)
+ 
+# OBIF: OMICS SCREENING
+## fExpr function
+To begin Omics screening, we will extract the feature expression values that comprise the data matrix m from your original data (“data”) using the fExpr function. The data matrix m will become object “expr.val”: 
+> expr.val <- fExpr(Data = data, 	# This is your original data object
+                  	colnum1 = 2,	# Column number where your data matrix m starts
+                  	colnum2 = 33,	# Column number where your data matrix m ends
+                 	n.ctrl = 8,	# Number of control or unexposed samples
+                	n.facA = 8,	# Number of samples exposed to factor A
+                  	n.facB = 8,	# Number of samples exposed to factor B
+                 	n.facAB = 8) 	# Number of samples exposed to both factor A and B
+> View(expr.val)
+ 
+
+## metaD function
+We now extract the remaining columns from your original data (“data”) using the metaD function and save them as metadata. The meta data columns will become object “metaD”:
+> metaD <- metaD(Data = data,
+                	colnum1 = 2,
+                	colnum2 = 33)
+> View(metaD)
+ 
+
+## ftIDs function
+Create a list of unique identifiers for the features in your data using the function ftIDs function:
+> Feat.ID <- ftIDs(Data = data,
+                 	colnum = 1, 	# Column number where you have your feature names
+                	method = 2) 	# Method to create a unique feature IDs. Recommended = 2.
+ 
+## nTool function
+To prepare for full factorial analysis, we need to define a set of parameters based on the number of samples in each group using the nTool function. These parameters include: “color”, to define a samples color palette; “names”, to define our generic sample names; “design”, to define our design matrix for expression analysis; “contrast”, to define our contrast matrix for contrast analysis; “design2x2”, to define our design matrix for our Omics-based interaction analysis; and “contrast2x2”, as a contrast matrix to be used with “design2x2” if needed. Hence, we compute all of our new object variables:
+> col.samples <- nTool(param = "color", 		 # new parameter defined by sample size       
+                     	n.ctrl = 8,
+                     	n.facA = 8,
+                     	n.facB = 8,
+                     	n.facAB = 8)
+
+> cn.expr.val <- nTool(param = "names",         
+                     	n.ctrl = 8,
+                     	n.facA = 8,
+                     	n.facB = 8,
+                     	n.facAB = 8)
+
+> design <- nTool(param = "design",         
+                     	n.ctrl = 8,
+                     	n.facA = 8,
+                     	n.facB = 8,
+                     	n.facAB = 8)
+
+> contrast <- nTool(param = "contrast",         
+                  	n.ctrl = 8,
+                  	n.facA = 8,
+                  	n.facB = 8,
+                  	n.facAB = 8)
+
+> design2x2 <- nTool(param = "design2x2",         
+                	n.ctrl = 8,
+                	n.facA = 8,
+                	n.facB = 8,
+                	n.facAB = 8)
+
+> contrast2x2 <- nTool(param = "contrast2x2",         
+                  	n.ctrl = 8,
+                  	n.facA = 8,
+                  	n.facB = 8,
+                  	n.facAB = 8)
+Up to this point, our original data (“data”) remains intact and has only been divided into workable elements while generating additional parameters that are required for analysis. We will now proceed to OBIF’s data scaling to identify the best suited data transformations for full factorial analysis.
+
+## normD function
+Adequate data scaling is required for a successful implementation of full factorial analysis. As a reminder, the main principles to apply data transformations in a datasets are: (i) background correction (BgC) is applied if it has not been corrected for abundant negative or low signal intensities; (ii) a log2-transformation (L2T) of count- or continuous-based data is applied to provide a Gaussian-like data distribution, if the expression values are expressed in linear form; and (iii) quantile normalization (QNm) is applied to all datasets to equalize inter-sample variances. As a quality control step, pre- and post-scaling distribution plots are generated by the normD function to evaluate the changes made by these normalization steps:
+> dataN.QC.VP <- normD(expr.val = expr.val, 	# This our extracted data matrix m
+                     QCplot =  "VP",			# Pre-/Post-scaling assessment with Violin Plots
+                     col.samples = col.samples)		# Predefined samples color palette
+
+> dataN.QC.DP <- normD(expr.val = expr.val,
+                     QCplot =  "DP",			# Pre-/Post-scaling assessment with Density Plots
+                     col.samples = col.samples)
+
+> dataN.QC.BP <- normD(expr.val = expr.val,
+                     QCplot =  "BP",			# Pre-/Post-scaling assessment with Box Plots
+                     col.samples = col.samples)
+
+> dataN.QC.VP			     > dataN.QC.DP		         > dataN.QC.BP
+     
+In this example, we know our original data (Data.0) is made of not-background corrected, linear intensity values that are not quantile normalized. Hence, we expect to apply all of the recommended transformations (Data.7) in order to have a normalized dataset for analysis. 
+
+Note: We highly recommend evaluating this data scaling process with all the QCplot modes of normD to adequately identify extreme data values and samples, left- or right-skewed and bimodal data distributions, and uneven normalizations before proceeding with data analysis. 
+
+## dataT function
+After selecting the best normalization strategy with normD, we now create our analysis ready scaled dataset with OBIF (“data.AR”) that will be used for downstream analysis using the dataT function:
+> data.AR <- dataT(expr.val = expr.val,
+                 	method = 7) 		# The number of best data transformations identified with normD
+
+> View(data.AR)
+ 
+
+## samHC function
+If an outlier detection or sample removal step was not performed in the generation of your original dataset, we included the samHC function to perform hierarchical clustering of samples and detect potential outliers:
+> dataN.QC.HC <- samHC(dataset = data.AR, 		# The dataset that you want to evaluate
+col.samples = col.samples)
+> dataN.QC.HC
+ 
+Note:  Samples are sequentially numbered based on the sample structure of data matrix m, facilitating identification of the outlier samples. If outliers are found, consider removal of outlier samples from the original data matrix m (“expr.val”) and re-start the Omics-screening. Sequential or a second outlier detection is discouraged, whether the first outlier detection occurred during the original data generation or with OBIF.
+
+## Outlier removal
+In this example, we removed the outliers from the “expr.val” object and re-started the Omics-screening:
+
+### nTools function
+> col.samples <- nTool(param = "color",        
+                     n.ctrl = 8,
+                     n.facA = 8,
+                     n.facB = 6,					 # updated by sample size
+                     n.facAB = 8)
+> cn.expr.val <- nTool(param = "names",         
+                     n.ctrl = 8,
+                     n.facA = 8,
+                     n.facB = 6,
+                     n.facAB = 8)
+> design <- nTool(param = "design",         
+                     n.ctrl = 8,
+                     n.facA = 8,
+                     n.facB = 6,
+                     n.facAB = 8)
+> contrast <- nTool(param = "contrast",         
+                  n.ctrl = 8,
+                  n.facA = 8,
+                  n.facB = 6,
+                  n.facAB = 8)
+> design2x2 <- nTool(param = "design2x2",         
+                n.ctrl = 8,
+                n.facA = 8,
+                n.facB = 6,
+                n.facAB = 8)
+> contrast2x2 <- nTool(param = "contrast2x2",         
+                  n.ctrl = 8,
+                  n.facA = 8,
+                  n.facB = 6,
+                  n.facAB = 8)
+> expr.val.clean <- expr.val[,-c(17:18)]			# remove outliers
+> colnames(expr.val.clean) <- cn.expr.val		# update column names
+
+### normD function 
+> dataN.QC.VP <- normD(expr.val = expr.val.clean, 	# updated without outliers
+                     QCplot =  "VP", 
+                     col.samples = col.samples) 
+> dataN.QC.DP <- normD(expr.val = expr.val.clean,
+                     QCplot =  "DP", 
+                     col.samples = col.samples)
+> dataN.QC.BP <- normD(expr.val = expr.val.clean,
+                     QCplot =  "BP", 
+                     col.samples = col.samples)
+
+### dataT function
+> data.AR <- dataT(expr.val = expr.val.clean, 		# updated without outliers
+                 method = 7) 
+> View(data.AR)
+
+### samHC function
+> dataN.QC.HC <- samHC(dataset = data.AR,		 # updated without outliers
+                     col.samples = col.samples)
+Note: The key results after the outlier removal are presented in Figure 2 of the Manuscript. 
+
+## obint function
+We are ready now to perform an Omics-based interaction analysis with OBIF using the obint function to identify if the factors studied interact at the whole Omics level. This function can evaluate such interaction by using the inputs: “modelfit”, to calculate only the ß-coefficients of a Two-way ANOVA; “modelsum”, to completely summarize the interaction effects from a regression model of a Two-way ANOVA; and “interplots”, to graphically represent the interaction effect with interaction plots of each factor:
+> intan.fit <- obint(dataAR = data.AR, 
+                   design2x2 = design2x2, 	# Design matrix for Omics-based interaction analysis
+                   result = "modelfit") 		# Calculated ß coefficients only
+> intan.sum <- obint(dataAR = data.AR,
+                   design2x2 = design2x2,
+                   result = "modelsum") 	# Summary of Two-way ANOVA
+> intan.plot <- obint(dataAR = data.AR,
+                   design2x2 = design2x2,
+                   result = "interplots") 		# Interaction plots
+> intan.fit				
+ 
+> intan.sum				
+ 
+> intan.plot
+  
+## obffa function
+We will now perform both expression analysis using our “design” matrix and contrast analysis using our “contrast” matrix by performing full factorial analysis for using the obffa function. This will calculate both the unadjusted and adjusted (using BH and Bonferroni methods) p-values of all the factorial effects at the feature-level within our dataset:
+> obffa.res <- obffa(dataAR = data.AR,
+                 design = design, # Expression analysis design matrix
+                 contrast = contrast) # Contrast analysis design matrix
+> View(obffa.res)
+ 
+
+## synEx function
+We now calculate differential expression changes of single and combined factor exposures relative to the unexposed or control group using the synEx function. This function will calculate: “m.”, mean expression value per group in log2 scale; “d.”, differential expression value of each single or combined factor group in log2 fold-change; “RawCI”, a raw combination index value; “AbsCI”, an absolute value of the combination index as defined in the Manuscript; “AbsIScore”, OBIF’s Interaction Score from the AbsCI; and a series of 8 categorial variables that will be used later for Feature Discovery. To perform this calculations, we will need to calculate a new parameter “si” and apply the synEx function:
+> si <- nTool(param = "si",	# new parameter         
+            n.ctrl = 8,
+            n.facA = 8,
+            n.facB = 6,		# updated sample size
+            n.facAB = 8)
+
+> synex.res <- synEx(dataAR = data.AR, 
+                   si = si)
+
+> View(synex.res)
+ 
+
+## build function
+To conclude the Omics Screening component of OBIF, we will build our exportable results table using the build function:
+> final.results <- build(featIDs = Feat.ID,
+                       meta.data = metaD,
+                       dataAR = data.AR,
+                       obffa.res = obffa.res,
+                       synex.res = synex.res)
+
+> View(final.results)
+ 
+ 
+ 
+ 
+ 
+Note: For demonstrative purposes, the example above includes all the analytic outcomes calculated so far, but a simpler version of the Omics screening can include only the Feat.ID, obffa.res and synex.res objects or be narrowed down to specific outcomes by choosing a specific subset of columns defined by the user.
+
+# OBIF: FEATURE DISCOVERY
+FtDpv, FtDbh and FtDbf functions
+Feature Discovery of OBIF’s synergy mediating feature clusters (DEMs, EPs and iDEMs) can be performed by using the FtDpv, FtDbh or FtDbf functions, after selecting a log2 fold-change cut-off (l2fc.co), a significant p-value cut-off (pval.co) and whether this p-value should be considered unadjusted (FtDpv), adjusted by FDR (FtDbh) or adjusted by Bonferroni method (FtDbf). Here, we will use FtDbh function:
+> final.labels <- FtDbh(final.results = final.results, # Use one of the 3 functions
+                      l2fc.co = 0.6,
+                      pval.co = 0.01)
+
+> View(final.labels)
+ 
+Note: Additional columns are added at the end where each feature is classified by DEMs, EPs and iDEMs.
+
+## OBIFc, OBIFe, OBIFp, OBIFi functions
+To visualize OBIF’s results from both Omics Screening and Feature Discovery, we will use the recently created “final.labels” object with the following functions: OBIFe, to show an Euler plot of the DEMs in each group; OBIFp, to perform Principal Component Analysis and reveal the EPs; OBIFi, to show the Interaction Score plot of the iDEMs; and OBIFc, to draw a summarizing Circos plot that contains all the results;
+> OBIF.DEMs <- OBIFe(final.labels = final.labels) 
+> OBIF.EPs <- OBIFp(final.labels = final.labels) 
+> OBIF.iDEMs <- OBIFi(final.labels = final.labels)
+> OBIF.summary <- OBIFc(final.labels = final.labels)
+
+
+Note: The graphical outputs of these functions are summarized in Figure S4 of the Manuscript.
+
+Data and Results Export 
+To export our results from both Omics Screening and Feature Discovery, we will execute these commands:
+> library(writexl)
+> write_xlsx(final.labels, "OBIF Results.xlsx")
+Note: You can save only the needed outputs by choosing a subset of columns from the “final.labels” object.
+
+# OBIF: BIOLOGICAL VALIDATION
+## exIPA, exEnR and exGSE functions
+After Omics Screening and Feature Discovery, we use the following functions to export the needed results for enrichment analysis of our dataset. These functions are: exIPA, to export the dataset as an input for Ingenuity Pathway Analysis (IPA); exEnR, to create a list of DEMs per group that is compatible with EnrichR; and exGSE, to format the dataset to build the GSEA’ expression datset file.  
+To prepare for IPA, we use the commands:
+> exIPA.res <- exIPA(final.labels = final.labels,
+                   	col.ft.name = 2, 	 # Column number with the feature names
+                   	obffa.res = obffa.res, 
+                   	FtD.method = 6) # Feature Discovery method. 0 for FtDpv, 6 for FtDbh and 12 for FtDbf
+> library(writexl)
+> write_xlsx(exIPA.res, "OBIF Results for IPA.xlsx")
+To prepare for EnrichR, we use the commands:
+> exEnR.res <- exEnR(final.labels = final.labels,
+                   		col.ft.name = 2)
+> library(xlsx)
+> write.xlsx(unlist(exEnR.res),"OBIF Results for EnrichR.xlsx")
+To prepare for GSEA, we use the commands:
+> exGSE.res <- exGSE(final.labels = final.labels,
+                   col.ft.name = 2,
+                   dataAR = data.AR)
+> library(writexl)
+> write_xlsx(exGSE.res, "OBIF Results for GSEA.xlsx")
+
+Note: These export formats can be used for additional tools and databases with similar inputs, such as the exIPA function to input data for Metaboanalyst, or the exEnR to use the DEMs in DAVID or KEGG Databses.
+ 
+# Cross-Omics Validation
+Please review the Manuscript for conceptual and technical details of multi-Omics applications of OBIF.
+
+# ADDITIONAL FUNCTION INFORMATION
+Updated resources for OBIF, extended code versions, detailed documentation and advanced functions, including supporting codes and files of this Quick Start document are included in OBIF’s Package and the Evans Laboratory GitHub as described in the Availability of Data Section and Table S1 of the Manuscript.
+
+
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(

@@ -1,0 +1,43 @@
+---
+title: "Platform-specific Pipeline"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Platform-specific Pipeline}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+# Array-based Omics data
+-	Target Omics: OBIF can adapt to the analysis of array-based datasets from gene expression microarrays, dna methylation microarrays, reverse phase protein arrays (RPPA). 
+-	Pre-processing considerations: Generation of analysis-ready data matrix from arrays usually include background correction during pre-processing to remove zero and low intensity signals. 
+-	Data scaling recommendations: It is recommended to re-analyze whether background correction during pre-processing or data scaling is better for the interaction of Omics-based interaction analysis of OBIF before full factorial analysis.
+-	Omics screening recommendations: It is always recommended to evaluate the performance of expression analysis and contrast analysis using the using the beta-uniform mixture model within the original unscaled and the thresholded scaled datasets after full factorial analysis of each. 
+-	Feature discovery recommendations: Analysis of low throughput arrays such as RPPA may not need the same multiple-testing correction as high throughput arrays such as gene microarrays.
+-	Biological validation recommendations: There are many enriching tools for DEMs and iDEMs from these platforms and is strongly encourage that predicted synergy drivers from these are co-validated between tools and experimental data.
+
+# Sequencing-based Omics data
+-	Target Omics: OBIF can adapt to the analysis of sequencing-based datasets from RNA-seq, DNA-seq for genotyping or de novo assembly, ChIP-seq and ATAC-seq. 
+-	Pre-processing considerations: Sequencing-based should be incorporate zero-handling during the pre-processing steps before the use of OBIF, as it requires an analysis-ready data matrix with no negative and no zero values.
+-	Data scaling recommendations: An example of the evaluation of zero handling process in the performance of tresholded data scaling by OBIF and detection of interaction effects is included in the Zero handling section of this Quick Start.
+-	Omics screening recommendations: It is always recommended to evaluate the performance of expression analysis and contrast analysis using the using the beta-uniform mixture model within the original unscaled and the thresholded scaled datasets after full factorial analysis of each. 
+-	Feature discovery recommendations: Less features are expected to be identified during feature discovery based on to the number of features removed from the zero handling strategies.
+-	Biological validation recommendations: There are many enriching tools for DEMs and iDEMs from these platforms and is strongly encourage that predicted synergy drivers from these are co-validated between tools and experimental data.
+
+# Mass spectrometry-based Omics data
+-	Target Omics: OBIF can adapt to the analysis of mass spectrometry-based datasets from protein and metabolite mass-spectrometry. 
+-	Pre-processing considerations: Signal intensity compensations and sample quality is critical in these developments of these datasets to avoid translating batch effects into the downstream analytic pipelines.
+-	Data scaling recommendations: The background correction steps in these types of data may not be necessary if the log-2 transformation gave a Gaussian-like data distribution that sufficiently improve the performance of OBIF’s analysis.
+-	Omics screening recommendations: It is always recommended to evaluate the performance of expression analysis and contrast analysis using the using the beta-uniform mixture model within the original unscaled and the thresholded scaled datasets after full factorial analysis of each. 
+-	Feature discovery recommendations: It was observed during analysis that feature discovery was congruent between similar datasets during feature discovery when datasets for all conditions were processed in the same batch.
+Biological validation recommendations: The synergy drivers identified during feature discovery are better validated with experimental data or cross-Omics analysis given that there are less enriching bioinformatic tools for these type of Omics data.
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(OBIF)
+```
